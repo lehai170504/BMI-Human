@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { register } from "@/services/authAPI";
 
 export default function Register() {
     // Khai báo state cho email, password, lỗi và trạng thái loading
@@ -10,33 +11,62 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [address, setAddress] = useState("");
+    const [age, setAge] = useState("");
+    const [gender, setGender] = useState("");
+    const [height, setHeight] = useState("");
+    const [weight, setWeight] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [isError, setIsError] = useState(false);
+    const [error, setError] = useState("");
     const router = useRouter();
 
-    // Hàm xử lý submit form đăng nhập
+    // Hàm xử lý submit form đăng ký
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSuccess(false);
         setIsError(false);
+        setError("");
+
+        // Validate mật khẩu nhập lại
+        if (password !== confirmPassword) {
+            setError("Mật khẩu nhập lại không khớp.");
+            setIsError(true);
+            return;
+        }
+
+        // Validate các trường số
+        if (
+            !age || isNaN(Number(age)) || Number(age) <= 0 ||
+            !height || isNaN(Number(height)) || Number(height) <= 0 ||
+            !weight || isNaN(Number(weight)) || Number(weight) <= 0
+        ) {
+            setError("Vui lòng nhập đúng tuổi, chiều cao, cân nặng.");
+            setIsError(true);
+            return;
+        }
+
         try {
-            const response = await fetch("/api/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, password, confirmPassword, name, phone, address }),
-            });
-            if (response.ok) {
-                // Đăng ký thành công, chuyển hướng về trang chủ
+            const response = await register(
+                email,
+                password,
+                name,
+                Number(age),
+                gender,
+                Number(height),
+                Number(weight)
+            );
+            if (response && (response.message === "User registered successfully" || response.success)) {
+                setIsSuccess(true);
                 router.push("/login");
             } else {
-                // Đăng ký thất bại, hiển thị lỗi
+                setError(response.message || "Đăng ký thất bại. Vui lòng thử lại.");
                 setIsError(true);
             }
-        } catch (error) {
+        } catch (err: any) {
+            setError(
+                err?.response?.data?.message ||
+                "Đã xảy ra lỗi. Vui lòng thử lại sau."
+            );
             setIsError(true);
         } finally {
             setIsSuccess(false);
@@ -47,9 +77,9 @@ export default function Register() {
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-200">
             <div className="w-full max-w-md bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col items-center">
                 <h1 className="text-3xl font-bold text-blue-600 mb-6 font-nunito">Đăng ký</h1>
-                {isError && (
+                {(isError || error) && (
                     <div className="mb-4 w-full bg-red-100 text-red-600 px-4 py-2 rounded text-center text-sm font-nunito">
-                        Đã xảy ra lỗi. Vui lòng thử lại sau.
+                        {error || "Đã xảy ra lỗi. Vui lòng thử lại sau."}
                     </div>
                 )}
                 <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
@@ -86,20 +116,42 @@ export default function Register() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}   
                         className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"  
+                        required
                     />
                     <input
-                        type="text"
-                        placeholder="Số điện thoại"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}  
+                        type="number"
+                        placeholder="Tuổi"
+                        value={age}
+                        onChange={(e) => setAge(e.target.value)}
                         className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"
+                        required
+                    />
+                    <select
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                        className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"
+                        required
+                    >
+                        <option value="">Chọn giới tính</option>
+                        <option value="male">Nam</option>
+                        <option value="female">Nữ</option>
+                        <option value="other">Khác</option>
+                    </select>
+                    <input
+                        type="number"
+                        placeholder="Chiều cao (cm)"
+                        value={height}
+                        onChange={(e) => setHeight(e.target.value)}
+                        className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"
+                        required
                     />
                     <input
-                        type="text"
-                        placeholder="Địa chỉ"
-                        value={address} 
-                        onChange={(e) => setAddress(e.target.value)}
+                        type="number"
+                        placeholder="Cân nặng (kg)"
+                        value={weight}
+                        onChange={(e) => setWeight(e.target.value)}
                         className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"
+                        required
                     />
 
                     <button

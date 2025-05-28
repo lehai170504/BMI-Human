@@ -12,14 +12,15 @@ import { swaggerSpec } from "./config/swagger";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Security middleware
 app.use(helmet({
   contentSecurityPolicy: false // Disable CSP for Swagger UI
 }));
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "*",
+  origin: process.env.CORS_ORIGIN,
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));

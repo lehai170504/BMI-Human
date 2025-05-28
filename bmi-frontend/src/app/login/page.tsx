@@ -1,9 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Link from "next/link";
 import { login } from "@/services/authAPI";
+import { AuthContext } from "@/context/authcontext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,6 +12,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { login: loginContext } = useContext(AuthContext);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,13 +22,17 @@ export default function Login() {
     try {
       const response = await login(email, password);
 
-      if (response.success) {
+      if (response.token) {
+        loginContext(response.user, response.token);
         router.push("/");
-      } else {
-        setError("Email hoặc mật khẩu không đúng");
+      } else {  
+        setError(response.message || "Email hoặc mật khẩu không đúng");
       }
-    } catch {
-      setError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.message ||
+        "Đã xảy ra lỗi. Vui lòng thử lại sau."
+      );
     } finally {
       setIsLoading(false);
     }

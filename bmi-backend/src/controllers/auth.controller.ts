@@ -76,17 +76,26 @@ export const loginUser = async (req: Request, res: Response) => {
       throw new AppError("User ID is missing", 500);
     }
 
-    const token = generateToken(
-      { id: user.id, email: user.email, name: user.name },
-      "1h"
-    );
+    const token = generateToken({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      age: user.age,
+      gender: user.gender,
+      height: user.height,
+      weight: user.weight
+    }, "1h");
 
     return res.json({
       token,
       user: {
         id: user.id,
         email: user.email,
-        name: user.name
+        name: user.name,
+        age: user.age ?? null,
+        gender: user.gender ?? null,
+        height: user.height ?? null,
+        weight: user.weight ?? null
       },
       message: "Login successful"
     });

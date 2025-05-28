@@ -1,63 +1,61 @@
 "use client";
 
-import { createContext, useState, ReactNode } from "react";
-import { login as loginAPI, logout as logoutAPI } from "@/services/authAPI";
+import { createContext, useState, ReactNode, useEffect } from "react";
 
-// Định nghĩa kiểu User (tùy thuộc vào backend trả về)
+// Định nghĩa kiểu User đồng bộ với backend
 type User = {
-  id: string;
+  id: number | string;
   name: string;
   email: string;
-  role?: string;
+  age?: number;
+  gender?: string;
+  height?: number;
+  weight?: number;
+  // Có thể bổ sung các trường khác nếu backend trả về
 };
 
 // Định nghĩa kiểu dữ liệu cho Context
 type AuthContextType = {
   isLoggedIn: boolean;
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  login: (user: User, token: string) => void;
+  logout: () => void;
 };
 
-// Tạo context với giá trị mặc định (dummy)
+// Tạo context với giá trị mặc định
 export const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
   user: null,
-  login: async () => {},
-  logout: async () => {},
+  login: () => {},
+  logout: () => {},
 });
 
 // Provider để bao bọc app
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const login = async (email: string, password: string) => {
-    try {
-      const response = await loginAPI(email, password);
-      if (response.success) {
-        setIsLoggedIn(true);
-        setUser(response.user);
-      } else {
-        console.error("Đăng nhập thất bại:", response.message);
-      }
-    } catch (error) {
-      console.error("Lỗi khi đăng nhập:", error);
+  useEffect(() => {
+    // Khi load lại trang, đọc user/token từ localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+      setIsLoggedIn(true);
     }
+  }, []);
+
+  const login = (user: User, token: string) => {
+    setUser(user);
+    setIsLoggedIn(true);
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", token);
   };
 
-  const logout = async () => {
-    try {
-      const response = await logoutAPI();
-      if (response.success) {
-        setIsLoggedIn(false);
-        setUser(null);
-      } else {
-        console.error("Đăng xuất thất bại:", response.message);
-      }
-    } catch (error) {
-      console.error("Lỗi khi đăng xuất:", error);
-    }
+  const logout = () => {
+    setUser(null);
+    setIsLoggedIn(false);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   return (
