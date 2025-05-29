@@ -48,7 +48,6 @@ const router = Router();
  *               weight:
  *                 type: number
  *                 description: Weight in kilograms
- *                 example: 70
  *             required:
  *               - height
  *               - weight

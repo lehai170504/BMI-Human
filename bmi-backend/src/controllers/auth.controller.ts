@@ -42,7 +42,11 @@ export const registerUser = async (req: Request, res: Response) => {
       user: {
         id: newUser.id,
         email: newUser.email,
-        name: newUser.name
+        name: newUser.name,
+        age: newUser.age,
+        gender: newUser.gender,
+        height: newUser.height,
+        weight: newUser.weight
       }
     });
   } catch (error) {
