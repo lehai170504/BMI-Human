@@ -5,6 +5,7 @@ import { useState, useContext } from "react";
 import Link from "next/link";
 import { login } from "@/services/authAPI";
 import { AuthContext } from "@/context/authcontext";
+import Swal from "sweetalert2";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -24,15 +25,30 @@ export default function Login() {
 
       if (response.token) {
         loginContext(response.user, response.token);
+        Swal.fire({
+          icon: "success",
+          title: "Đăng nhập thành công",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#3085d6"
+        });
         router.push("/");
       } else {  
-        setError(response.message || "Email hoặc mật khẩu không đúng");
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: response.message || "Email hoặc mật khẩu không đúng",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#3085d6"
+        });
       }
     } catch (err: any) {
-      setError(
-        err?.response?.data?.message ||
-        "Đã xảy ra lỗi. Vui lòng thử lại sau."
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: err?.response?.data?.message || "Đã xảy ra lỗi. Vui lòng thử lại sau.",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#3085d6"
+      });
     } finally {
       setIsLoading(false);
     }

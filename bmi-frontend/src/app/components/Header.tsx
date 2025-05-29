@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { AuthContext } from "@/context/authcontext";
+import Swal from "sweetalert2";
 
 export default function Header() {
   const { isLoggedIn, user, logout } = useContext(AuthContext);
@@ -109,8 +110,19 @@ export default function Header() {
 
               <button
                 onClick={() => {
-                  logout();
-                  setMenuOpen(false);
+                  Swal.fire({
+                    icon: "warning",
+                    title: "Xác nhận",
+                    text: "Bạn có chắc chắn muốn đăng xuất không?",
+                    showCancelButton: true,
+                    confirmButtonText: "Đăng xuất", 
+                    confirmButtonColor: "#3085d6"
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      logout();
+                      setMenuOpen(false);
+                    }
+                  });
                 }}
                 className="flex items-center gap-2 bg-blue-600 text-white font-nunito px-4 py-2 rounded-xl shadow hover:bg-blue-700 hover:scale-105 transition"
               >

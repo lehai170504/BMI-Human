@@ -9,7 +9,7 @@ const options: swaggerJsdoc.Options = {
       description: 'API documentation for BMI Calculator application',
       contact: {
         name: 'API Support',
-        email: 'support@example.com'
+        email: 'hoanghaile175@gmail.com'
       }
     },
     servers: [

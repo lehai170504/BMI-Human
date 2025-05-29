@@ -1,6 +1,14 @@
 import { BMI } from "@/types/bmi";
 
-export default function BMIResult({ bmi, category, healthRisk, explanation }: BMI) {
+export default function BMIResult({ bmi }: { bmi: BMI | null }) {
+  if (!bmi) {
+    return (
+      <div className="text-center text-gray-500 font-nunito mt-6">
+        Chưa có kết quả BMI nào.
+      </div>
+    );
+  }
+
   return (
     <div className="mt-6 text-center bg-gradient-to-br from-blue-50 via-white to-pink-50 border-2 border-blue-200 rounded-3xl shadow-2xl p-6 flex flex-col items-center gap-4">
       <div className="flex items-center justify-center mb-2">
@@ -17,7 +25,7 @@ export default function BMIResult({ bmi, category, healthRisk, explanation }: BM
               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 7v.01" />
             </svg>
-            BMI: {bmi}
+            BMI: {bmi.bmiValue}
           </span>
         </div>
         <div className="flex items-center justify-center gap-2">
@@ -25,7 +33,7 @@ export default function BMIResult({ bmi, category, healthRisk, explanation }: BM
             <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
-            Phân loại: {category}
+            Phân loại: {bmi.category}
           </span>
         </div>
         <div className="flex items-center justify-center gap-2">
@@ -34,17 +42,8 @@ export default function BMIResult({ bmi, category, healthRisk, explanation }: BM
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3" />
               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
             </svg>
-            Nguy cơ sức khỏe: {healthRisk}
+            Ngày tính: {new Date(bmi.date).toLocaleString("vi-VN", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })}
           </span>
-        </div>
-      </div>
-      <div className="mt-4 w-full max-w-xl mx-auto bg-white/80 border border-blue-100 rounded-2xl shadow-inner p-4 flex items-start gap-3">
-        <svg className="w-7 h-7 text-blue-400 mt-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 20.5C6.201 20.5 1 15.299 1 9.5S6.201-1.5 12-1.5 23 4.701 23 10.5 17.799 20.5 12 20.5z" />
-        </svg>
-        <div className="text-left">
-          <span className="block text-base font-semibold text-blue-600 mb-1 font-nunito">Giải thích chi tiết:</span>
-          <span className="text-gray-700 text-base font-nunito">{explanation}</span>
         </div>
       </div>
     </div>

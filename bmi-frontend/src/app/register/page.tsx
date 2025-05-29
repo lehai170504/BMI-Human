@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import { register } from "@/services/authAPI";
+import Swal from "sweetalert2";
+
 
 export default function Register() {
     // Khai báo state cho email, password, lỗi và trạng thái loading
@@ -29,7 +31,13 @@ export default function Register() {
 
         // Validate mật khẩu nhập lại
         if (password !== confirmPassword) {
-            setError("Mật khẩu nhập lại không khớp.");
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Mật khẩu nhập lại không khớp!",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#3085d6"
+            });
             setIsError(true);
             return;
         }
@@ -40,7 +48,13 @@ export default function Register() {
             !height || isNaN(Number(height)) || Number(height) <= 0 ||
             !weight || isNaN(Number(weight)) || Number(weight) <= 0
         ) {
-            setError("Vui lòng nhập đúng tuổi, chiều cao, cân nặng.");
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Vui lòng nhập đúng tuổi, chiều cao, cân nặng!",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#3085d6"
+            });
             setIsError(true);
             return;
         }
@@ -59,7 +73,13 @@ export default function Register() {
                 setIsSuccess(true);
                 router.push("/login");
             } else {
-                setError(response.message || "Đăng ký thất bại. Vui lòng thử lại.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: response.message || "Đăng ký thất bại. Vui lòng thử lại.",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#3085d6"
+                });
                 setIsError(true);
             }
         } catch (err: any) {

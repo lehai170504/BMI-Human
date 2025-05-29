@@ -8,7 +8,7 @@ import swaggerUi from "swagger-ui-express";
 import authRoutes from "./routes/auth.routes";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 import { swaggerSpec } from "./config/swagger";
-
+import bmiRoutes from "./routes/bmi.routes";
 dotenv.config();
 
 const app = express();
@@ -61,6 +61,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/bmi", bmiRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {
