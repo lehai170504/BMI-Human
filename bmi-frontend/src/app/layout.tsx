@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
-import { AuthProvider } from "@/context/Auth/AuthContext";
 import { Roboto } from "next/font/google";
-import Sidebar from "@/components/layout/Sidebar";
+import Providers from "./providers";
 
 const roboto = Roboto({
   weight: ["400", "700"],
@@ -53,11 +52,11 @@ export default function RootLayout({
       <body
         className={`antialiased pt-20`}
       >
-        <AuthProvider>
+        <Providers>
           <Header />
           {children}
-          <Footer />
-        </AuthProvider>
+          <Footer />  
+        </Providers>
       </body>
     </html>
   );

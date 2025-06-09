@@ -3,9 +3,10 @@
 import DashboardLayout from "../../../components/layout/DashboardLayout";
 import { useEffect, useState, useContext } from "react";
 import BMIResult from "@/components/BMI/BMIResult";
-import { getBmiHistory, deleteBmi } from "@/services/bmiAPI";  
+import { getBmiHistory, deleteBmi } from "@/services/bmiAPI";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import { AuthContext } from "@/context/Auth/AuthContext";
 import { Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -25,7 +26,8 @@ export default function History() {
     const [bmiGoal, setBmiGoal] = useState<number | null>(null);
     const [goalInput, setGoalInput] = useState(22);
     const [showGoalInput, setShowGoalInput] = useState(false);
-    const { user } = useContext(AuthContext);
+    const user = useSelector((state: any) => state.auth.user);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const fetchHistory = async () => {

@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 export const bmiSlice = createSlice({
     name: "bmi",
     initialState: {

@@ -1,11 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { login } from "@/services/authAPI";
-import { AuthContext } from "@/context/Auth/AuthContext";
+import { login as loginAPI } from "@/services/authAPI";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { login as loginRedux } from "@/app/redux/features/Auth/authSlice";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,7 +14,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { login: loginContext } = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,10 +22,10 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const response = await login(email, password);
+      const response = await loginAPI(email, password);
 
       if (response.token) {
-        loginContext(response.user, response.token);
+        dispatch(loginRedux({ user: response.user, token: response.token }));
         Swal.fire({
           icon: "success",
           title: "Đăng nhập thành công",

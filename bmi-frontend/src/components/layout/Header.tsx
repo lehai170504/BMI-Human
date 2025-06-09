@@ -1,16 +1,21 @@
 'use client'
 
 import Link from "next/link";
-import { useContext, useState } from "react";
-import { AuthContext } from "@/context/Auth/AuthContext";
+import { useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/app/redux/features/Auth/authSlice";
+
 export default function Header() {
-  const { isLoggedIn, user, logout } = useContext(AuthContext);
+  const isLoggedIn = useSelector((state: any) => state.auth.isAuthenticated);
+  const user = useSelector((state: any) => state.auth.user);
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLinkClick = () => setMenuOpen(false);
-  const router = useRouter();
+
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white text-black shadow-lg py-3 px-4 md:px-6">
       <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
@@ -118,7 +123,7 @@ export default function Header() {
                     confirmButtonColor: "#3085d6"
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      logout();
+                      dispatch(logout());
                       setMenuOpen(false);
                       router.push("/login");
                     }

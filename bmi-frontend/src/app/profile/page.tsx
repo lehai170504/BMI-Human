@@ -1,25 +1,24 @@
 'use client'
+
 import DashboardLayout from "../../components/layout/DashboardLayout";
-import { useContext } from "react";
-import { AuthContext } from "@/context/Auth/AuthContext";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logout } from "@/app/redux/features/Auth/authSlice";
 
 export default function ProfilePage() {
-  const { user } = useContext(AuthContext);
+  const user = useSelector((state: any) => state.auth.user);
+  const dispatch = useDispatch();
 
   if (!user) {
     return (
       <DashboardLayout>
         <div className="text-center py-10 text-red-500 font-nunito">
           Bạn chưa đăng nhập!
-        </div>
+        </div>  
       </DashboardLayout>
     );
   }
 
-  // Log để kiểm tra dữ liệu user thực tế
-  console.log("User in context:", user);
-
-  // Helper để hiển thị giá trị hoặc "Chưa cập nhật"
   const showValue = (val: any) =>
     val !== undefined && val !== null && val !== "" ? val : "Chưa cập nhật";
 
@@ -61,7 +60,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <button className="mt-8 px-6 py-2 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition">
+        <button className="mt-8 px-6 py-2 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition" onClick={() => dispatch(logout())}>
           Chỉnh sửa thông tin
         </button>
       </div>

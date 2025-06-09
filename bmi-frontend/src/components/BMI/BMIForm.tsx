@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react";
 import { calculateBmi } from "@/services/bmiAPI";
 import { BMI } from "@/types/bmi";
