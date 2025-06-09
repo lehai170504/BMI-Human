@@ -1,5 +1,5 @@
 "use client";
-import DashboardLayout from "../components/DashboardLayout";
+import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useTheme } from "@/context/themecontext";
 
 export default function Setting() {

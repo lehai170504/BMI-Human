@@ -1,16 +1,30 @@
 "use client";
 
-import DashboardLayout from "../components/DashboardLayout";
+import DashboardLayout from "../../../components/layout/DashboardLayout";
 import { useEffect, useState, useContext } from "react";
-import BMIResult from "@/components/BMIResult";
+import BMIResult from "@/components/BMI/BMIResult";
 import { getBmiHistory, deleteBmi } from "@/services/bmiAPI";  
 import Swal from "sweetalert2";
-import { AuthContext } from "@/context/authcontext";
+import { AuthContext } from "@/context/Auth/AuthContext";
+import { Bar } from "react-chartjs-2";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from "chart.js";
 
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function History() {
     const [history, setHistory] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [bmiGoal, setBmiGoal] = useState<number | null>(null);
+    const [goalInput, setGoalInput] = useState(22);
+    const [showGoalInput, setShowGoalInput] = useState(false);
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
@@ -66,6 +80,43 @@ export default function History() {
         });
     };
 
+    // --- BMI Goal ---
+    const latestBmi = history.length > 0 ? history[history.length - 1].bmi : null;
+    const progress = bmiGoal && latestBmi ? Math.min(100, Math.round((100 - Math.abs(latestBmi - bmiGoal) / bmiGoal * 100))) : 0;
+
+    // --- Reminder for today ---
+    const today = new Date().toISOString().slice(0, 10);
+    const hasToday = history.some(item => item.date && item.date.slice(0, 10) === today);
+
+    // --- Chart Data ---
+    const chartData = {
+        labels: history.map(item => item.date ? item.date.slice(0, 10) : ""),
+        datasets: [
+            {
+                label: "BMI",
+                data: history.map(item => item.bmi),
+                backgroundColor: "#3b82f6",
+            },
+        ],
+    };
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            title: { display: true, text: "Biểu đồ lịch sử BMI" },
+        },
+        scales: {
+            y: {
+                title: { display: true, text: "BMI" },
+                min: 10,
+                max: 40,
+            },
+            x: {
+                title: { display: true, text: "Ngày" },
+            },
+        },
+    };
+
     return (
         <DashboardLayout>
             <div className="min-h-screen w-full bg-gradient-to-br from-blue-100 via-white to-blue-200 flex items-center justify-center py-8 px-2">
@@ -76,6 +127,60 @@ export default function History() {
                     <p className="text-gray-500 text-center mb-4 font-nunito">
                         Xem lại các lần tính BMI trước đây. Bạn có thể xóa từng mục hoặc xóa toàn bộ lịch sử.
                     </p>
+
+                    {/* --- BMI Goal Section --- */}
+                    <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4 bg-blue-50 border border-blue-200 rounded-xl p-4">
+                        <div className="flex flex-col gap-2">
+                            <span className="font-semibold text-blue-700 font-nunito">🎯 Mục tiêu BMI lý tưởng:</span>
+                            {bmiGoal ? (
+                                <div className="flex items-center gap-3">
+                                    <span className="text-lg font-bold text-blue-600">{bmiGoal}</span>
+                                    <button onClick={() => setShowGoalInput(true)} className="text-xs text-blue-500 underline">Thay đổi</button>
+                                </div>
+                            ) : (
+                                <button onClick={() => setShowGoalInput(true)} className="text-blue-500 underline text-sm">Đặt mục tiêu</button>
+                            )}
+                            {showGoalInput && (
+                                <form onSubmit={e => { e.preventDefault(); setBmiGoal(goalInput); setShowGoalInput(false); }} className="flex items-center gap-2 mt-2">
+                                    <input
+                                        type="number"
+                                        step="0.1"
+                                        min={10}
+                                        max={40}
+                                        value={goalInput}
+                                        onChange={e => setGoalInput(Number(e.target.value))}
+                                        className="border rounded px-2 py-1 w-20"
+                                    />
+                                    <button type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">Lưu</button>
+                                    <button type="button" onClick={() => setShowGoalInput(false)} className="text-gray-400 ml-2">Hủy</button>
+                                </form>
+                            )}
+                        </div>
+                        {bmiGoal && latestBmi && (
+                            <div className="flex flex-col items-center gap-1">
+                                <span className="text-sm text-gray-500 font-nunito">Tiến trình đạt mục tiêu</span>
+                                <div className="w-40 bg-gray-200 rounded-full h-4 overflow-hidden">
+                                    <div className="bg-blue-500 h-4 rounded-full transition-all" style={{ width: `${progress}%` }} />
+                                </div>
+                                <span className="text-xs text-blue-700 font-nunito mt-1">{progress}%</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* --- Reminder Section --- */}
+                    {!hasToday && (
+                        <div className="w-full bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-lg p-3 text-center font-nunito">
+                            Bạn chưa ghi nhận BMI cho hôm nay. Hãy cập nhật để theo dõi tiến trình sức khỏe!
+                        </div>
+                    )}
+
+                    {/* --- Chart Section --- */}
+                    {history.length > 1 && (
+                        <div className="w-full bg-white rounded-xl shadow border border-blue-100 p-4">
+                            <Bar data={chartData} options={chartOptions} height={120} />
+                        </div>
+                    )}
+
                     {isLoading && (
                         <div className="text-center text-blue-600 animate-pulse font-nunito">Đang tải lịch sử...</div>
                     )}

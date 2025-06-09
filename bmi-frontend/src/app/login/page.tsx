@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useContext } from "react";
 import Link from "next/link";
 import { login } from "@/services/authAPI";
-import { AuthContext } from "@/context/authcontext";
+import { AuthContext } from "@/context/Auth/AuthContext";
 import Swal from "sweetalert2";
 
 export default function Login() {

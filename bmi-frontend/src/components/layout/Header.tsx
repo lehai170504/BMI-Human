@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useContext, useState } from "react";
-import { AuthContext } from "@/context/authcontext";
+import { AuthContext } from "@/context/Auth/AuthContext";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 export default function Header() {
@@ -69,8 +69,7 @@ export default function Header() {
           {/* Navigation Links */}
           {[ 
             { href: "/", label: "Trang chủ" },
-            { href: "/blogs", label: "Blogs" },
-            { href: "/bmi", label: "Tính BMI" },
+            { href: "/bmi-calculator", label: "Tính BMI" },
             { href: "/contact", label: "Liên hệ" },
           ].map(({ href, label }) => (
             <Link key={href} href={href}>

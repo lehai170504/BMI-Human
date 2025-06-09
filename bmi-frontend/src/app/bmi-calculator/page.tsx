@@ -1,7 +1,7 @@
 "use client";
 
-import BMIForm from "@/components/BMIForm";
-import BMIResult from "@/components/BMIResult";
+import BMIForm from "@/components/BMI/BMIForm";
+import BMIResult from "@/components/BMI/BMIResult";
 import { useState } from "react";
 import { BMI } from "@/types/bmi";
 

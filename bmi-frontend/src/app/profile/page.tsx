@@ -1,7 +1,7 @@
 'use client'
-import DashboardLayout from "../components/DashboardLayout";
+import DashboardLayout from "../../components/layout/DashboardLayout";
 import { useContext } from "react";
-import { AuthContext } from "@/context/authcontext";
+import { AuthContext } from "@/context/Auth/AuthContext";
 
 export default function ProfilePage() {
   const { user } = useContext(AuthContext);
