@@ -94,9 +94,9 @@ export default function Register() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-200">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-red-100 via-white to-red-200">
             <div className="w-full max-w-md bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col items-center">
-                <h1 className="text-3xl font-bold text-blue-600 mb-6 font-nunito">Đăng ký</h1>
+                <h1 className="text-3xl font-bold text-red-600 mb-6 font-nunito">Đăng ký</h1>
                 {(isError || error) && (
                     <div className="mb-4 w-full bg-red-100 text-red-600 px-4 py-2 rounded text-center text-sm font-nunito">
                         {error || "Đã xảy ra lỗi. Vui lòng thử lại sau."}
@@ -108,7 +108,7 @@ export default function Register() {
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition font-nunito"
+                        className="px-4 py-3 rounded-lg border border-red-200 focus:outline-none focus:ring-2 focus:ring-red-400 transition font-nunito"
                         required
                         autoComplete="email"
                     />
@@ -117,7 +117,7 @@ export default function Register() {
                         placeholder="Mật khẩu"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"
+                        className="px-4 py-3 rounded-lg border border-red-200 focus:outline-none focus:ring-2 focus:ring-red-400 transition font-nunito"
                         required
                         autoComplete="current-password"
                     />
@@ -126,7 +126,7 @@ export default function Register() {
                         placeholder="Nhập lại mật khẩu"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"
+                        className="px-4 py-3 rounded-lg border border-red-200 focus:outline-none focus:ring-2 focus:ring-red-400 transition font-nunito"
                         required
                         autoComplete="new-password"
                     />
@@ -135,7 +135,7 @@ export default function Register() {
                         placeholder="Tên"
                         value={name}
                         onChange={(e) => setName(e.target.value)}   
-                        className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"  
+                        className="px-4 py-3 rounded-lg border border-red-200 focus:outline-none focus:ring-2 focus:ring-red-400 transition font-nunito"  
                         required
                     />
                     <input
@@ -143,13 +143,13 @@ export default function Register() {
                         placeholder="Tuổi"
                         value={age}
                         onChange={(e) => setAge(e.target.value)}
-                        className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"
+                        className="px-4 py-3 rounded-lg border border-red-200 focus:outline-none focus:ring-2 focus:ring-red-400 transition font-nunito"
                         required
                     />
                     <select
                         value={gender}
                         onChange={(e) => setGender(e.target.value)}
-                        className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"
+                        className="px-4 py-3 rounded-lg border border-red-200 focus:outline-none focus:ring-2 focus:ring-red-400 transition font-nunito"
                         required
                     >
                         <option value="">Chọn giới tính</option>
@@ -162,7 +162,7 @@ export default function Register() {
                         placeholder="Chiều cao (cm)"
                         value={height}
                         onChange={(e) => setHeight(e.target.value)}
-                        className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"
+                        className="px-4 py-3 rounded-lg border border-red-200 focus:outline-none focus:ring-2 focus:ring-red-400 transition font-nunito"
                         required
                     />
                     <input
@@ -170,13 +170,13 @@ export default function Register() {
                         placeholder="Cân nặng (kg)"
                         value={weight}
                         onChange={(e) => setWeight(e.target.value)}
-                        className="px-4 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-pink-400 transition font-nunito"
+                        className="px-4 py-3 rounded-lg border border-red-200 focus:outline-none focus:ring-2 focus:ring-red-400 transition font-nunito"
                         required
                     />
 
                     <button
                         type="submit"
-                        className="bg-gradient-to-r from-blue-500 to-blue-400 text-white font-semibold py-3 rounded-lg shadow hover:scale-105 transition-all duration-150 disabled:opacity-60"
+                        className="bg-gradient-to-r from-red-500 to-red-400 text-white font-semibold py-3 rounded-lg shadow hover:scale-105 transition-all duration-150 disabled:opacity-60"
                         disabled={isSuccess}
                     >
                         {isSuccess ? (
@@ -194,7 +194,7 @@ export default function Register() {
                 </form>
                 <div className="mt-6 text-sm text-gray-500 font-nunito">
                     Đã có tài khoản?{" "}
-                    <Link href="/login" className="text-blue-500 font-semibold hover:underline font-nunito">
+                    <Link href="/login" className="text-red-500 font-semibold hover:underline font-nunito">
                         Đăng nhập ngay
                     </Link>
                 </div>
