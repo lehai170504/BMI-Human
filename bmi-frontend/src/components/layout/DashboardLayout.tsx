@@ -6,15 +6,17 @@ import { useSelector } from "react-redux";
 
 const menu = [
   { name: "Profile", path: "/profile" },
-  { name: "History", path: "/bmi-calendar" },
-  { name: "Settings", path: "/settings" },
+  { name: "Calendar", path: "/bmi-calendar" },
+  { name: "BMI", path: "/bmi-gold" },
+  { name: "Calo", path: "/calo-calculator" },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isLoggedIn = useSelector((state: any) => state.auth.isAuthenticated);
+  const user = useSelector((state: any) => state.auth.user);
 
-  if (!isLoggedIn) {
+  if (!isLoggedIn) {    
     return <div>Bạn chưa đăng nhập!</div>;
   }
 
@@ -23,9 +25,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar co theo chiều cao nội dung */}  
       <aside className={`w-64 bg-white shadow-lg p-6 hidden md:flex flex-col justify-between`}>
         <div>
-          <h2 className={`text-2xl font-bold text-gray-800 mb-6`}>
-            Dashboard
-          </h2>
+          <img src="/avatar.png" alt="Avatar" className="w-12 h-12 object-cover" />
+          <h2 className={`text-2xl font-bold text-gray-800 mb-6`}>{user.name}</h2>
           <ul className="space-y-2">
             {menu.map((item) => (
               <li key={item.name}>

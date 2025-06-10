@@ -7,6 +7,7 @@ export type BMI = {
     bmiValue: number;
     category: string;
     date: string;
+    bmiGoal: number;
     // Thêm các trường khác nếu backend trả về
 }
 

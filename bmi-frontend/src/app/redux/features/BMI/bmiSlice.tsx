@@ -1,65 +1,60 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { BMI } from '@/types/bmi';
 
-export type BMI = {
-    id: number;
-    userId: number;
-    weight: number;
-    height: number;
-    bmiValue: number;
-    category: string;
-    date: string;
+interface BMIState {
+    currentBMI: BMI | null;
+    bmiHistory: BMI[];
+    bmiGoal: {
+        target: number;
+        deadline: string;
+    } | null;
+    loading: boolean;
+    error: string | null;
 }
 
-const initialState: BMI = {
-    id: 0,
-    userId: 0,
-    weight: 0,
-    height: 0,
-    bmiValue: 0,
-    category: "",
-    date: "",
-}
+const initialState: BMIState = {
+    currentBMI: null,
+    bmiHistory: [],
+    bmiGoal: null,
+    loading: false,
+    error: null
+};
 
-export const bmiSlice = createSlice({
-    name: "bmi",
-    initialState,  
+const bmiSlice = createSlice({
+    name: 'bmi',
+    initialState,
     reducers: {
-        setBmi: (state, action) => {
-            state.id = action.payload.id;
-            state.userId = action.payload.userId;
-            state.weight = action.payload.weight;
-            state.height = action.payload.height;
-            state.bmiValue = action.payload.bmiValue;
-            state.category = action.payload.category;
-            state.date = action.payload.date;
+        setCurrentBMI: (state, action: PayloadAction<BMI>) => {
+            state.currentBMI = action.payload;
         },
-        clearBmi: (state) => {
-            state.id = 0;
-            state.userId = 0;
-            state.weight = 0;
-            state.height = 0;
-            state.bmiValue = 0;
+        setBMIHistory: (state, action: PayloadAction<BMI[]>) => {
+            state.bmiHistory = action.payload;
         },
-        setBmiCategory: (state, action) => {
-            state.category = action.payload.category;
+        setBmiGoal: (state, action: PayloadAction<{ target: number; deadline: string }>) => {
+            state.bmiGoal = action.payload;
         },
-        setBmiDate: (state, action) => {
-            state.date = action.payload.date;
+        setLoading: (state, action: PayloadAction<boolean>) => {
+            state.loading = action.payload;
         },
-        setBmiBmiValue: (state, action) => {
-            state.bmiValue = action.payload.bmiValue;
+        setError: (state, action: PayloadAction<string | null>) => {
+            state.error = action.payload;
         },
-        setBmiUserId: (state, action) => {
-            state.userId = action.payload.userId;
-        },
-        setBmiWeight: (state, action) => {
-            state.weight = action.payload.weight;
-        },
-        setBmiHeight: (state, action) => {
-            state.height = action.payload.height;
-        },
-        },
+        clearBMIState: (state) => {
+            state.currentBMI = null;
+            state.bmiHistory = [];
+            state.bmiGoal = null;
+            state.error = null;
+        }
+    }
 });
 
-export const { setBmi, clearBmi, setBmiCategory, setBmiDate, setBmiBmiValue, setBmiUserId, setBmiWeight, setBmiHeight } = bmiSlice.actions;
+export const {
+    setCurrentBMI,
+    setBMIHistory,
+    setBmiGoal,
+    setLoading,
+    setError,
+    clearBMIState
+} = bmiSlice.actions;
+
 export default bmiSlice.reducer;
