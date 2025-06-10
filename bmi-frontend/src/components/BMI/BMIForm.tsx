@@ -4,6 +4,8 @@ import { useState } from "react";
 import { calculateBmi } from "@/services/bmiAPI";
 import { BMI } from "@/types/bmi";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { setBmi, setBmiCategory, setBmiDate, setBmiBmiValue, setBmiUserId, setBmiWeight, setBmiHeight } from "@/app/redux/features/BMI/bmiSlice";
 
 interface BMIFormProps {
   onCalculate: (bmi: BMI) => void;
@@ -12,6 +14,7 @@ interface BMIFormProps {
 export default function BMIForm({ onCalculate }: BMIFormProps) {
   const [weight, setWeight] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +30,13 @@ export default function BMIForm({ onCalculate }: BMIFormProps) {
     }
     try {
       const result: BMI = await calculateBmi(height, weight);
+      dispatch(setBmi(result));
+      dispatch(setBmiCategory(result.category));
+      dispatch(setBmiDate(result.date));
+      dispatch(setBmiBmiValue(result.bmiValue));
+      dispatch(setBmiUserId(result.userId));
+      dispatch(setBmiWeight(result.weight));
+      dispatch(setBmiHeight(result.height));
       onCalculate(result);
     } catch (error) {
       Swal.fire({

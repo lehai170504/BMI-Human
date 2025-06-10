@@ -1,7 +1,7 @@
 "use client";
 
 import DashboardLayout from "../../../components/layout/DashboardLayout";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import BMIResult from "@/components/BMI/BMIResult";
 import { getBmiHistory, deleteBmi } from "@/services/bmiAPI";
 import { useSelector } from "react-redux";
